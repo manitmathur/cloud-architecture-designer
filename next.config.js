@@ -1,25 +1,21 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   output: 'export',
-  // Disable all features that might cause build issues
+  // Disable image optimization which can cause issues with Electron builds
   images: { unoptimized: true },
-  // Disable CSS processing temporarily
-  webpack: (config) => {
-    // Skip CSS processing for the build
-    const rules = config.module.rules
-      .find((rule) => typeof rule.oneOf === 'object')
-      .oneOf.filter((rule) => Array.isArray(rule.use));
-    
-    rules.forEach((rule) => {
-      rule.use = rule.use.map((moduleLoader) => {
-        if (moduleLoader.loader?.includes('css-loader') ||
-            moduleLoader.loader?.includes('postcss-loader')) {
-          return { ...moduleLoader, options: { ...moduleLoader.options, modules: false } };
-        }
-        return moduleLoader;
-      });
-    });
+  // Simplified webpack configuration
+  webpack: (config, { isServer }) => {
+    // For Electron, we need to make sure the renderer process can access the CSS
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
+    }
     
     return config;
-  }
+  },
+  // Since we're using Electron, we can disable strict mode
+  reactStrictMode: false,
 };
