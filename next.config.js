@@ -5,7 +5,6 @@ const nextConfig = {
   
   // Add proper configuration for server-side API routes
   reactStrictMode: true,
-  swcMinify: true,
   
   // Image optimization configuration
   images: {
