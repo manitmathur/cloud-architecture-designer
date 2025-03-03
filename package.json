@@ -5,13 +5,11 @@
   "author": "Your Name",
   "main": "electron/main/index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "electron:dev": "concurrently \"cross-env NODE_ENV=development next dev\" \"electron .\"",
+    "dev": "npx next dev",
+    "build": "npx next build",
+    "start": "npx next start",
     "clean": "rimraf .next out dist",
-    "electron:build": "npm run clean && next build && electron-builder build --win --publish never",
-    "dist": "npm run clean && next build && electron-builder"
+    "dist": "npm run clean && npm run build && electron-builder"
   },
   "build": {
     "appId": "com.yourname.cloudarchitect",
@@ -38,6 +36,11 @@
     }
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "mongodb": "^6.14.1",
+    "next": "^15.2.0"
   }
 }
