@@ -1,0 +1,54 @@
+{
+  "name": "cloud-architect",
+  "version": "1.0.0",
+  "description": "Cloud Architecture Designer",
+  "author": "Your Name",
+  "main": "electron/main/index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "electron:dev": "concurrently \"next dev\" \"electron .\"",
+    "electron:build": "next build && electron-builder build --win --publish never",
+    "build:web": "next build",
+    "build:electron": "next build && electron-builder build --win --publish never",
+    "dist": "next build && electron-builder"
+  },
+  "build": {
+    "appId": "com.yourname.cloudarchitect",
+    "productName": "Cloud Architecture Designer",
+    "files": [
+      "electron/**/*",
+      "out/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources",
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@types/mongodb": "^4.0.7",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8",
+    "electron-serve": "^2.1.1",
+    "next": "^15.2.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.9"
+  }
+}
