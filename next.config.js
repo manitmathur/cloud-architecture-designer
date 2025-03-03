@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  // Ensure Next.js doesn't try to use features incompatible with static export
-  images: { unoptimized: true }
+  // We should NOT use output: 'export' since it doesn't support API routes
+  // output: 'export',
+  
+  // Add proper configuration for server-side API routes
+  reactStrictMode: true,
+  swcMinify: true,
+  
+  // Image optimization configuration
+  images: {
+    domains: [],
+  },
 };
 
 module.exports = nextConfig;

@@ -1,10 +1,16 @@
 // app/api/architectures/route.ts
 
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '../../../lib/mongodb-handler';
+import { connectToDatabase } from '../../../lib/mongodb';
 
+/**
+ * GET handler for /api/architectures
+ * Retrieves all architectures from the database
+ */
 export async function GET() {
   try {
+    console.log('GET /api/architectures: Fetching all architectures');
+    
     // Connect to the database
     const { db } = await connectToDatabase();
     
@@ -14,6 +20,8 @@ export async function GET() {
       .find({})
       .sort({ createdAt: -1 })
       .toArray();
+    
+    console.log(`Found ${architectures.length} architectures`);
     
     // Return the architectures as JSON
     return NextResponse.json(architectures);
@@ -26,6 +34,10 @@ export async function GET() {
   }
 }
 
+/**
+ * POST handler for /api/architectures
+ * Creates a new architecture in the database
+ */
 export async function POST(request: Request) {
   try {
     // Log the entire request for debugging

@@ -1,9 +1,8 @@
 // app/api/architectures/[id]/route.ts
 
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '../../../../lib/mongodb-handler';
+import { connectToDatabase } from '../../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
-
 
 // Define the type for the route params
 type RouteContext = {
@@ -12,7 +11,7 @@ type RouteContext = {
   };
 };
 
-//PUT handler for a single architecture
+// PUT handler for a single architecture
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -76,6 +75,8 @@ export async function GET(
     // Get the architecture ID from the URL parameters
     const { id } = context.params;
     
+    console.log(`GET /api/architectures/${id}: Fetching architecture`);
+    
     // Connect to the database
     const { db } = await connectToDatabase();
     
@@ -86,18 +87,21 @@ export async function GET(
     
     // If no architecture was found, return a 404 error
     if (!architecture) {
+      console.error(`Architecture with ID ${id} not found`);
       return NextResponse.json(
         { error: 'Architecture not found' },
         { status: 404 }
       );
     }
     
+    console.log(`Found architecture: ${architecture.name}`);
+    
     // Return the architecture as JSON
     return NextResponse.json(architecture);
   } catch (error) {
     console.error('Database Error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch architecture' },
+      { error: 'Failed to fetch architecture: ' + (error instanceof Error ? error.message : 'Unknown error') },
       { status: 500 }
     );
   }
@@ -109,8 +113,9 @@ export async function DELETE(
 ) {
   try {
     // Get the architecture ID from the URL parameters
-    // No need to await params - it's already available
     const id = params.id;
+    
+    console.log(`DELETE /api/architectures/${id}: Deleting architecture`);
     
     // Connect to the database
     const { db } = await connectToDatabase();
@@ -122,18 +127,21 @@ export async function DELETE(
     
     // Check if anything was deleted
     if (result.deletedCount === 0) {
+      console.error(`Architecture with ID ${id} not found for deletion`);
       return NextResponse.json(
         { error: 'Architecture not found' },
         { status: 404 }
       );
     }
     
+    console.log(`Successfully deleted architecture with ID ${id}`);
+    
     // Return a success response
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Database Error:', error);
     return NextResponse.json(
-      { error: 'Failed to delete architecture' },
+      { error: 'Failed to delete architecture: ' + (error instanceof Error ? error.message : 'Unknown error') },
       { status: 500 }
     );
   }
