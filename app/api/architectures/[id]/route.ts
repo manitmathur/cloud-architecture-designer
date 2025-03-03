@@ -1,8 +1,16 @@
 // app/api/architectures/[id]/route.ts
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '../../../../lib/mongodb-handler';
 import { ObjectId } from 'mongodb';
+
+
+// Define the type for the route params
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
 
 //PUT handler for a single architecture
 export async function PUT(
@@ -60,14 +68,13 @@ export async function PUT(
   }
 }
 
-// GET handler to fetch a single architecture
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: RouteContext
 ) {
   try {
     // Get the architecture ID from the URL parameters
-    const id = params.id;
+    const { id } = context.params;
     
     // Connect to the database
     const { db } = await connectToDatabase();
