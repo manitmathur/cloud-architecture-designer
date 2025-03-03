@@ -1,7 +1,7 @@
 // app/api/architectures/route.ts
 
 import { NextResponse } from 'next/server';
-const { connectToDatabase } = require('../../lib/mongodb-handler');
+import { connectToDatabase } from '../../lib/mongodb-handler';
 
 /**
  * GET handler for /api/architectures
